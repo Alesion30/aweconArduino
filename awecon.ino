@@ -28,21 +28,23 @@ void loop()
     delay(1000);
 }
 
-void convertToState(char chr)
+// Arduinoの制御 NodeServerからactionが送られてくる
+void convertToState(char action)
 {
-    digitalWrite(LED_PIN2, HIGH);
-    if (chr == 'w')
+    switch (action)
     {
+    case 'w':
         Serial.println("LED ON");
         digitalWrite(LED_PIN2, HIGH);
-    }
-    if (chr == 't')
-    {
+        break;
+    case 't':
         Serial.println("LED OFF");
         digitalWrite(LED_PIN2, LOW);
+        break;
     }
 }
 
+// 温度センサを利用して、室温を取得
 float get_temp()
 {
     int temp_raw;
