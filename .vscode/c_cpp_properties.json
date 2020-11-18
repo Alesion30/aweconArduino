@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "defines": [
+                "ARDUINO=10800"
+            ],
+            "includePath": [
+                "/Applications/Arduino.app/Contents/Java/tools/**",
+                "/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/**",
+                "${workspaceRoot}",
+                "/Applications/Arduino.app/hardware/tools/**",
+                "/Applications/Arduino.app/libraries/**",
+                "/Users/yutaohira/Documents/Arduino/hardware/tools/**",
+                "/Users/yutaohira/Documents/Arduino/libraries/**"
+            ],
+            "forcedInclude": [
+                "/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/cores/arduino/Arduino.h"
+            ],
+            "intelliSenseMode": "clang-x64",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "compilerPath": "/usr/local/bin/gcc-9"
+        }
+    ],
+    "version": 4
+}
