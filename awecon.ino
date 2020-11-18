@@ -23,7 +23,6 @@ void loop()
         ReaderFromNode = (char)Serial.read();
         convertToState(ReaderFromNode);
     }
-    Serial.println("temp");
     Serial.println(get_temp());
     delay(1000);
 }
