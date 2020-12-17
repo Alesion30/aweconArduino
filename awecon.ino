@@ -2,9 +2,6 @@
 #include <PanasonicHeatpumpIR.h>
 #include <MitsubishiHeavyHeatpumpIR.h>
 #include "Wire.h"
-#define TMP102_I2C_ADDRESS 0x48
-#define LED_PIN1 11
-#define LED_PIN2 10
 int power_p;
 int mode_p;
 int fan_p;
@@ -18,11 +15,6 @@ void setup()
     // setup
     Wire.begin();
     Serial.begin(9600);
-    pinMode(LED_PIN1, OUTPUT);
-    pinMode(LED_PIN2, OUTPUT);
-
-    digitalWrite(LED_PIN1, HIGH);
-    digitalWrite(LED_PIN2, LOW);
 }
 
 void loop()
@@ -101,100 +93,14 @@ void convertToState(char action)
         Serial.print("\th:");
         Serial.println(hdir_p);
         //エアコン起動
-        // on_awecon_panasonic(power_p, mode_p, fan_p, temp_p, vdir_p, hdir_p);
-        on_awecon_MitsuHeavy(power_p, mode_p, fan_p, temp_p, vdir_p, hdir_p);
+        on_Panasonic(power_p, mode_p, fan_p, temp_p, vdir_p, hdir_p);
+        // on_MitsuHeavy(power_p, mode_p, fan_p, temp_p, vdir_p, hdir_p);
         break;
     case 'O':
         Serial.println("Awecon OFF");
         //エアコン停止
-        // off_awecon_panasonic();
-        off_awecon_MitsuHeavy();
+        off_Panasonic();
+        // off_MitsuHeavy();
         break;
     }
-}
-
-//charからintへの変換(文字の場合は-1を出力)
-int ctoi(char c)
-{
-    switch (c)
-    {
-    case '0':
-        return 0;
-    case '1':
-        return 1;
-    case '2':
-        return 2;
-    case '3':
-        return 3;
-    case '4':
-        return 4;
-    case '5':
-        return 5;
-    case '6':
-        return 6;
-    case '7':
-        return 7;
-    case '8':
-        return 8;
-    case '9':
-        return 9;
-    default:
-        return -1;
-    }
-}
-
-//Panasonicのエアコン起動
-void on_awecon_panasonic(int power, int mode, int fan, int temp, int vdir, int hdir)
-{
-    IRSenderPWM irSender(3);
-    PanasonicDKEHeatpumpIR *heatpumpIR;
-    heatpumpIR = new PanasonicDKEHeatpumpIR();
-    heatpumpIR->send(irSender, power, mode, fan, temp, vdir, hdir);
-};
-
-//三菱重工のエアコン起動
-void on_awecon_MitsuHeavy(int power, int mode, int fan, int temp, int vdir, int hdir)
-{
-    IRSenderPWM irSender(3);
-    MitsubishiHeavyZJHeatpumpIR *heatpumpIR;
-    heatpumpIR = new MitsubishiHeavyZJHeatpumpIR();
-    heatpumpIR->send(irSender, power, mode, fan, temp, vdir, hdir, false, false, false);
-}
-
-//Panasonicのエアコン停止
-void off_awecon_panasonic()
-{
-    IRSenderPWM irSender(3);
-    PanasonicDKEHeatpumpIR *heatpumpIR;
-
-    heatpumpIR = new PanasonicDKEHeatpumpIR();
-    heatpumpIR->send(irSender, POWER_OFF, MODE_HEAT, FAN_AUTO, 24, VDIR_AUTO, HDIR_AUTO);
-}
-
-//三菱重工のエアコン停止
-void off_awecon_MitsuHeavy()
-{
-    IRSenderPWM irSender(3);
-    MitsubishiHeavyZJHeatpumpIR *heatpumpIR;
-    heatpumpIR = new MitsubishiHeavyZJHeatpumpIR();
-    heatpumpIR->send(irSender, POWER_OFF, MODE_HEAT, FAN_AUTO, 24, VDIR_AUTO, HDIR_AUTO, false, false, false);
-}
-
-// 温度センサを利用して、室温を取得
-float get_temp()
-{
-    int temp_raw;
-    float temp;
-
-    Wire.beginTransmission(TMP102_I2C_ADDRESS);
-    Wire.write(0x00);
-    Wire.endTransmission();
-
-    Wire.requestFrom(TMP102_I2C_ADDRESS, 2);
-    Wire.endTransmission();
-
-    temp_raw = Wire.read() * 16 + Wire.read() / 16;
-    temp = temp_raw * 0.0625;
-
-    return temp;
 }
