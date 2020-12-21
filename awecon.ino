@@ -2,7 +2,7 @@
 #include <PanasonicHeatpumpIR.h>
 #include <MitsubishiHeavyHeatpumpIR.h>
 #include "Wire.h"
-int power_p;
+// int power_p;
 int mode_p;
 int fan_p;
 int temp_p;
@@ -45,10 +45,10 @@ void convertToState(char action)
     switch (setting)
     {
     //Power(電源)
-    case 'P':
-        if (action_num >= 0)
-            power_p = action_num;
-        break;
+    // case 'P':
+    //     if (action_num >= 0)
+    //         power_p = action_num;
+    //     break;
     //Mode(運転モード)
     case 'M':
         if (action_num >= 0)
@@ -80,9 +80,7 @@ void convertToState(char action)
         break;
     //エアコン設定パラメータ全送信後
     case 'E':
-        Serial.print("p:");
-        Serial.print(power_p);
-        Serial.print("\tm:");
+        Serial.print("m:");
         Serial.print(mode_p);
         Serial.print("\tf:");
         Serial.print(fan_p);
@@ -93,8 +91,8 @@ void convertToState(char action)
         Serial.print("\th:");
         Serial.println(hdir_p);
         //エアコン起動
-        on_Panasonic(power_p, mode_p, fan_p, temp_p, vdir_p, hdir_p);
-        // on_MitsuHeavy(power_p, mode_p, fan_p, temp_p, vdir_p, hdir_p);
+        on_Panasonic(mode_p, fan_p, temp_p, vdir_p, hdir_p);
+        // on_MitsuHeavy(mode_p, fan_p, temp_p, vdir_p, hdir_p);
         break;
     case 'O':
         Serial.println("Awecon OFF");
