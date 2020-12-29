@@ -1,5 +1,5 @@
-//charからintへの変換(文字の場合は-1を出力)
-int ctoi(char c)
+// charからintへの変換(文字の場合は-1を出力)
+int convertToInt(char c)
 {
   switch (c)
   {

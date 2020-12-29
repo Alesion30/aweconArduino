@@ -1,6 +1,7 @@
+#include "Wire.h"
 #define TMP102_I2C_ADDRESS 0x48
 
-float get_temp()
+float getTemp()
 {
   int temp_raw;
   float temp;

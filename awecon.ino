@@ -2,7 +2,8 @@
 #include <PanasonicHeatpumpIR.h>
 #include <MitsubishiHeavyHeatpumpIR.h>
 #include "Wire.h"
-// int power_p;
+
+// 変数
 int mode_p;
 int fan_p;
 int temp_p;
@@ -12,13 +13,13 @@ char setting;
 
 void setup()
 {
-    // setup
     Wire.begin();
     Serial.begin(9600);
 }
 
 void loop()
 {
+    // Nodeサーバーからシリアル通信で文字列が送られてきたとき
     if (Serial.available() > 0)
     {
         char ReaderFromNode;
@@ -26,60 +27,53 @@ void loop()
         convertToState(ReaderFromNode);
     }
 
-    Serial.println(get_temp());
+    // 現在の温度を送信
+    Serial.println(getTemp());
+
+    // 1秒待つ
     delay(1000);
 }
 
-// Arduinoの制御 NodeServerからactionが送られてくる
+// Arduinoの制御 Nodeサーバーからactionが送られてくる
 void convertToState(char action)
 {
-    int action_num;
+    int actionNum;
 
-    //actionを数値に変換
-    action_num = ctoi(action);
+    // actionを数値に変換
+    actionNum = convertToInt(action);
 
-    //actionが文字の時
-    if (action_num == -1)
+    // actionが文字の時
+    if (actionNum == -1)
+    {
         setting = action;
+    }
 
     switch (setting)
     {
-    //Power(電源)
-    // case 'P':
-    //     if (action_num >= 0)
-    //         power_p = action_num;
-    //     break;
-    //Mode(運転モード)
-    case 'M':
-        if (action_num >= 0)
-            mode_p = action_num;
+    case 'M': // Mode(運転モード)
+        if (actionNum >= 0)
+            mode_p = actionNum;
         break;
-    //Fan(風量)
-    case 'F':
-        if (action_num >= 0)
-            fan_p = action_num;
+    case 'F': // Fan(風量)
+        if (actionNum >= 0)
+            fan_p = actionNum;
         break;
-    //Temperature(温度) 20~29度
-    case 'T':
-        if (action_num >= 0)
-            temp_p = 20 + action_num;
+    case 'T': // Temperature(温度) 20~29度
+        if (actionNum >= 0)
+            temp_p = 20 + actionNum;
         break;
-    //温度 16~19度
-    case 't':
-        if (action_num >= 0)
-            temp_p = 10 + action_num;
-    //VDIR(風向高さ)
-    case 'V':
-        if (action_num >= 0)
-            vdir_p = action_num;
+    case 't': // 温度 16~19度
+        if (actionNum >= 0)
+            temp_p = 10 + actionNum;
+    case 'V': // VDIR(風向高さ)
+        if (actionNum >= 0)
+            vdir_p = actionNum;
         break;
-    //HDIR(風向左右)
-    case 'H':
-        if (action_num >= 0)
-            hdir_p = action_num;
+    case 'H': // HDIR(風向左右)
+        if (actionNum >= 0)
+            hdir_p = actionNum;
         break;
-    //エアコン設定パラメータ全送信後
-    case 'E':
+    case 'E': // 設定情報をエアコンに送信
         Serial.print("m:");
         Serial.print(mode_p);
         Serial.print("\tf:");
@@ -90,15 +84,13 @@ void convertToState(char action)
         Serial.print(vdir_p);
         Serial.print("\th:");
         Serial.println(hdir_p);
-        //エアコン起動
-        on_Panasonic(mode_p, fan_p, temp_p, vdir_p, hdir_p);
-        // on_MitsuHeavy(mode_p, fan_p, temp_p, vdir_p, hdir_p);
+        controlPanasonicAirConditionar(mode_p, fan_p, temp_p, vdir_p, hdir_p);
+        // controlMitsuHeavyAirConditionar(mode_p, fan_p, temp_p, vdir_p, hdir_p);
         break;
-    case 'O':
-        Serial.println("Awecon OFF");
-        //エアコン停止
-        off_Panasonic();
-        // off_MitsuHeavy();
+    case 'O': // エアコンを停止
+        Serial.println("Sent a signal to the air conditioner to stop.");
+        stopPanasonicAirConditionar();
+        // stopMitsuHeavyAirConditionar();
         break;
     }
 }
