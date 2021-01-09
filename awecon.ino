@@ -102,7 +102,7 @@ void convertToState(char action)
         break;
     case 'O': // エアコンを停止
         Serial.println("Sent a signal to the air conditioner to stop.");
-        stopMitsuHeavyAirConditionar();
+        stopDaikinAirConditionar();
         // stopPanasonicAirConditionar();
         // stopMitsuHeavyAirConditionar();
         digitalWrite(LED_PIN1, LOW);
