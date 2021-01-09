@@ -4,6 +4,9 @@
 #include <DaikinHeatpumpIR.h>
 #include "Wire.h"
 
+#define LED_PIN1 11
+#define LED_PIN2 10
+
 // 変数
 int mode_p;
 int fan_p;
@@ -16,6 +19,12 @@ void setup()
 {
     Wire.begin();
     Serial.begin(9600);
+
+    // LED設定
+    pinMode(LED_PIN1, OUTPUT);
+    pinMode(LED_PIN2, OUTPUT);
+    digitalWrite(LED_PIN1, LOW);
+    digitalWrite(LED_PIN2, LOW);
 }
 
 void loop()
@@ -88,12 +97,16 @@ void convertToState(char action)
         controlDaikinAirConditionar(mode_p, fan_p, temp_p, vdir_p, hdir_p);
         // controlPanasonicAirConditionar(mode_p, fan_p, temp_p, vdir_p, hdir_p);
         // controlMitsuHeavyAirConditionar(mode_p, fan_p, temp_p, vdir_p, hdir_p);
+        digitalWrite(LED_PIN1, HIGH);
+        digitalWrite(LED_PIN2, LOW);
         break;
     case 'O': // エアコンを停止
         Serial.println("Sent a signal to the air conditioner to stop.");
         stopMitsuHeavyAirConditionar();
         // stopPanasonicAirConditionar();
         // stopMitsuHeavyAirConditionar();
+        digitalWrite(LED_PIN1, LOW);
+        digitalWrite(LED_PIN2, HIGH);
         break;
     }
 }
