@@ -2,6 +2,7 @@
 #include <PanasonicHeatpumpIR.h>
 #include <MitsubishiHeavyHeatpumpIR.h>
 #include <DaikinHeatpumpIR.h>
+#include <HitachiHeatpumpIR.h>
 #include "Wire.h"
 
 #define LED_PIN1 11
@@ -94,17 +95,19 @@ void convertToState(char action)
         Serial.print(vdir_p);
         Serial.print("\th:");
         Serial.println(hdir_p);
-        controlDaikinAirConditionar(mode_p, fan_p, temp_p, vdir_p, hdir_p);
+        // controlDaikinAirConditionar(mode_p, fan_p, temp_p, vdir_p, hdir_p);
         // controlPanasonicAirConditionar(mode_p, fan_p, temp_p, vdir_p, hdir_p);
         // controlMitsuHeavyAirConditionar(mode_p, fan_p, temp_p, vdir_p, hdir_p);
+        controlHitachiAirConditionar(mode_p, fan_p, temp_p, vdir_p, hdir_p);
         digitalWrite(LED_PIN1, HIGH);
         digitalWrite(LED_PIN2, LOW);
         break;
     case 'O': // エアコンを停止
         Serial.println("Sent a signal to the air conditioner to stop.");
-        stopDaikinAirConditionar();
+        // stopDaikinAirConditionar();
         // stopPanasonicAirConditionar();
         // stopMitsuHeavyAirConditionar();
+        stopHitachiAirConditionar();
         digitalWrite(LED_PIN1, LOW);
         digitalWrite(LED_PIN2, HIGH);
         break;
