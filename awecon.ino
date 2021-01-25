@@ -36,13 +36,17 @@ void loop()
         char ReaderFromNode;
         ReaderFromNode = (char)Serial.read();
         convertToState(ReaderFromNode);
+        // 0.05秒待つ
+        delay(50);
+    }
+    else
+    {
+        // 1秒待つ
+        delay(1000);
     }
 
     // 現在の温度を送信
     Serial.println(getTemp());
-
-    // 1秒待つ
-    delay(1000);
 }
 
 // Arduinoの制御 Nodeサーバーからactionが送られてくる
@@ -97,8 +101,8 @@ void convertToState(char action)
         Serial.println(hdir_p);
         // controlDaikinAirConditionar(mode_p, fan_p, temp_p, vdir_p, hdir_p);
         // controlPanasonicAirConditionar(mode_p, fan_p, temp_p, vdir_p, hdir_p);
-        // controlMitsuHeavyAirConditionar(mode_p, fan_p, temp_p, vdir_p, hdir_p);
-        controlHitachiAirConditionar(mode_p, fan_p, temp_p, vdir_p, hdir_p);
+        controlMitsuHeavyAirConditionar(mode_p, fan_p, temp_p, vdir_p, hdir_p);
+        // controlHitachiAirConditionar(mode_p, fan_p, temp_p, vdir_p, hdir_p);
         digitalWrite(LED_PIN1, HIGH);
         digitalWrite(LED_PIN2, LOW);
         break;
@@ -106,8 +110,8 @@ void convertToState(char action)
         Serial.println("Sent a signal to the air conditioner to stop.");
         // stopDaikinAirConditionar();
         // stopPanasonicAirConditionar();
-        // stopMitsuHeavyAirConditionar();
-        stopHitachiAirConditionar();
+        stopMitsuHeavyAirConditionar();
+        // stopHitachiAirConditionar();
         digitalWrite(LED_PIN1, LOW);
         digitalWrite(LED_PIN2, HIGH);
         break;
